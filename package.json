@@ -1,0 +1,19 @@
+{
+  "name": "qaservice",
+  "version": "1.0.0",
+  "description": "QA service for SDC",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nonchalant-Narwhal/QAService.git"
+  },
+  "author": "Ian Robinson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nonchalant-Narwhal/QAService/issues"
+  },
+  "homepage": "https://github.com/Nonchalant-Narwhal/QAService#readme"
+}
