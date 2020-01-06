@@ -57,6 +57,9 @@
 <row name="asker_name" null="1" autoincrement="0">
 <datatype>VARCHAR</datatype>
 <default>NULL</default></row>
+<row name="asker_email" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
 <row name="question_helpfulness" null="1" autoincrement="0">
 <datatype>VARCHAR</datatype>
 <default>NULL</default></row>
@@ -82,6 +85,9 @@
 <datatype>TIME WITH TIME ZONE</datatype>
 <default>NULL</default></row>
 <row name="answerer_name" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="answerer_email" null="1" autoincrement="0">
 <datatype>VARCHAR</datatype>
 <default>NULL</default></row>
 <row name="helpfulness" null="1" autoincrement="0">

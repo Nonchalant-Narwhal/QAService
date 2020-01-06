@@ -1,0 +1,7 @@
+FROM postgres:12.1
+EXPOSE 5432
+
+WORKDIR /
+
+
+

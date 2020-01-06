@@ -1,0 +1,45 @@
+version: '3.2'
+volumes:
+  pgqadata:
+services:
+  db:
+    volumes:
+      - type: volume
+        source: pgqadata
+        target: /var/li b/postgresql/data
+      # - type: bind
+      #   source: ./pgdata
+      #   target: /pgbackup
+    image: qadb
+    restart: always
+    ports:
+      - 5431:5432
+    environment:
+      POSTGRES_PASSWORD: qanon
+      POSTGRES_USER: postgres
+      POSTGRES_DB: qa
+  server:
+    image: qadbserver
+    restart: always
+    ports:
+      - 7000:7000
+      # version: '3.2'
+# services:
+#   db:
+#     volumes:
+#       - type: bind
+#         source: ./pg
+#         target:
+#     image: qa
+#     restart: always
+#     ports:
+#       - 5432:5432
+#     environment:
+#       POSTGRES_PASSWORD: qanon
+#       POSTGRES_USER: dude
+#       POSTGRES_DB: qa
+#   server:
+#     image: qaserver
+#     restart: always
+#     ports:
+#       - 7000:7000

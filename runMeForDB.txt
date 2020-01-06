@@ -1,0 +1,31 @@
+*build image
+docker image build --tag qadb ./
+
+*start image
+docker run -p 5432:5432 \
+    --name pgserver \
+    -e POSTGRES_PASSWORD=postgres \
+    -e POSTGRES_USER=postgres \
+    --mount source=qapgdata,target=/var/lib/postgresql/data \
+    -v ~/Documents/Hack\ Reactor/SDC/QAService/pgdata:/pgdump \
+    qa
+
+
+    -v ~/Documents/Hack\ Reactor/SDC/QAService/pg:/pg_backup/ \
+    
+    
+*run me after you spin up the container to restore the backup
+docker exec -it 9ae bash
+
+psql -U postgres < /pg_backup/qadb.sql 
+
+
+
+
+notes on docker commands
+-always check the --help for order of flags, options , commands, etc
+
+-it is interactive, probably goes before image ID
+-v is to mount a volume, use /locationonClient:/locationtoBindInContainer
+
+psql will need you to 
