@@ -1,4 +1,18 @@
+const router = require('express').Router();
+const { getQuery } = require('./models.js');
+
 // GET /qa/:product_id Retrieves a list of questions for a particular product. This list does not include any reported questions.
+router.get('/qa/:product_id', (req, res) => {
+  // run getQuery and respond with list of objects
+  let product_id = req.params.product_id;
+  (async () => {
+    const result = await getQuery(
+      `SELECT * FROM questions WHERE product_id=${product_id}`
+    );
+    await res.send(result);
+  })();
+});
+
 // params: product_id, page, count
 
 // GET /qa/:question_id/answers Returns answers for a given question. This list does not include any reported answers.
@@ -21,3 +35,5 @@
 
 // PUT /qa/answer/:answer_id/report  Updates an answer to show it has been reported. Note, this action does not delete the answer, but the answer will not be returned in the above GET request.
 // params: answer_id responds 204 CONTENT
+
+module.exports = router;
