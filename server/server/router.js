@@ -1,21 +1,51 @@
 const router = require('express').Router();
 const { getQuery } = require('./models.js');
+const queryParser = require('./queryparsers.js');
 
 // GET /qa/:product_id Retrieves a list of questions for a particular product. This list does not include any reported questions.
 router.get('/qa/:product_id', (req, res) => {
-  // run getQuery and respond with list of objects
   let product_id = req.params.product_id;
-  (async () => {
-    const result = await getQuery(
-      `SELECT * FROM questions WHERE product_id=${product_id}`
-    );
-    await res.send(result);
-  })();
+  let offset = req.query.page || 'null';
+  let limit = req.query.count || 'null';
+  console.log('LIMIT', limit);
+  getQuery(
+    `SELECT *
+      FROM (
+          SELECT *
+          FROM questions
+          WHERE product_id = ${product_id}
+      ) AS q
+      LEFT JOIN answers AS a ON q.question_id = a.question_id
+      LEFT JOIN answer_photos AS asph ON a.answer_id = asph.answer_id OFFSET ${offset} LIMIT ${limit}`
+  )
+    .then(result => {
+      let parsed = queryParser.getProducts(result.rows, product_id);
+      res.send(parsed);
+    })
+    .catch(err => {
+      console.error(err);
+      res.sendStatus(400);
+    });
 });
-
 // params: product_id, page, count
 
 // GET /qa/:question_id/answers Returns answers for a given question. This list does not include any reported answers.
+router.get('/qa/:question_id/answers', (req, res) => {
+  let { question_id } = req.params;
+  let { page = 'NULL', count = 'NULL' } = req.query;
+  const columns = 'answer_id, body, date, answerer_name, helpfulness';
+  getQuery(
+    `SELECT ${columns} FROM answers WHERE question_id = ${question_id} LIMIT ${count} OFFSET ${page}`
+  )
+    .then(result => {
+      let parsed = queryParser.getAnswers(result.rows, question_id);
+      res.send(parsed);
+    })
+    .catch(err => {
+      console.error(err);
+      res.sendStatus(400);
+    });
+});
 // params: product_id, page, count
 
 // POST /qa/:product_id Adds a question for the given product

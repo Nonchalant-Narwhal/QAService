@@ -1,0 +1,1 @@
+SELECT * FROM questions NATURAL JOIN answers WHERE product_id=7 AND reported=0 OFFSET 0 LIMIT 10;
