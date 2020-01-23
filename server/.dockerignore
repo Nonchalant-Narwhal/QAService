@@ -1,0 +1,11 @@
+Dockerfile
+node_modules
+.gitignore
+.env
+docker-compose.yaml
+runMeForDB.txt
+server/query.sql
+db.sql
+db.xml
+NOSQLSchema.txt
+redis.conf

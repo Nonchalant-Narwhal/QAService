@@ -2,32 +2,19 @@ const { Pool } = require('pg');
 
 // set these to environemnt variables eventually
 const pool = new Pool({
-  user: 'dude',
-  password: 'qanon',
-  database: 'qa',
-  host: 'localhost',
-  port: 5431
+  user: process.env.DBUSERNAME || 'dude',
+  password: process.env.DBPASSWORD || 'qanon',
+  database: process.env.DB || 'qa',
+  host: process.env.DBHOST || 'ec2-18-207-248-181.compute-1.amazonaws.com',
+  port: process.env.DBPORT || 5432,
+  max: process.env.MAXCLIENTS || 20
 });
 
-pool.on('connect', () => {
-  console.log('\x1b[32m', 'Successfully connected to DB!', '\x1b[0m');
-});
-pool.on('acquire', () => {
-  console.log('Client acquired');
-  console.log('total clients in pool:', pool.totalCount);
-});
-pool.on('remove', () => {
-  console.log('\x1b[33m', 'Client removed', '\x1b[0m');
-});
-pool.on('error', err => {
-  console.error('\x1b[31m', err, '\x1b[0m');
-});
-
-const pgquery = queryText => {
+const pgQuery = (queryText, values) => {
   return new Promise((resolve, reject) => {
     pool.connect().then(client => {
       client
-        .query(queryText)
+        .query(queryText, values)
         .then(result => {
           resolve(result);
         })
@@ -53,4 +40,4 @@ const connectToDB = () => {
   });
 };
 
-module.exports = { connectToDB, pgquery };
+module.exports = { connectToDB, pgQuery };

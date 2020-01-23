@@ -23,8 +23,6 @@ CREATE TABLE Answers (
  helpfulness INTEGER
 );
 
-
-
 ALTER TABLE Answers ADD CONSTRAINT Answers_pkey PRIMARY KEY (answer_id);
 
 ALTER TABLE Answers ADD CONSTRAINT Answers_question_id_fkey FOREIGN KEY (question_id) REFERENCES Questions(question_id);

@@ -1,0 +1,23 @@
+version: '3.2'
+services:
+  redis:
+    volumes:
+      - ~/Documents/Hack Reactor/SDC/QAService/server/redis.conf:/usr/local/etc/redis/redis.conf
+      ### replace the above target source with wherever the redis.conf file is located. Must be an absolute filepath...
+    image: redis:latest
+    restart: always
+    ports:
+      - 6379:6379
+    command: redis-server /usr/local/etc/redis/redis.conf
+  server:
+    env_file:
+      - .env
+    links:
+      - redis
+    depends_on:
+      - redis
+    image: eeeeman22/qadbserver:latest
+    restart: always
+    ports:
+      - 3000:3000
+      - 5432:5432

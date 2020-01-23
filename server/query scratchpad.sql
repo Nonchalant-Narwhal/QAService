@@ -67,14 +67,56 @@ SELECT answer_id, 'http://www.ilikebigqueries'
 FROM rows
 
     
+
+INSERT INTO answers (question_id, body, date_written, answerer_name, answerer_email, reported, helpfulness) 
+    VALUES ('16', 'very long time. Very veryVERY  long', '2020-01-07', 'ianianian', 'eeeeman22',0,0);
+INSERT INTO answer_photos (answer_id, url) VALUES (currval('answers_answer_id_seq'), 'http://www.ilikebigqueries');
+INSERT INTO answer_photos (answer_id, url) VALUES (currval('answers_answer_id_seq'), 'http://www.ilikebigqueries'), (currval('answers_answer_id_seq'), 'http://www.ilikeasdoijasdijasbigqueries'), (currval('answers_answer_id_seq'), 'http://www.ilreallyoiasjdoijes');
+
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
+START TRANSACTION;
+	INSERT INTO answers (question_id, body, date_written, answerer_name, answerer_email, reported, helpfulness)
+	VALUES ('2177', '"went down to georgia"', '2020-01-09', '"demonman"', '"demoname"',0,0);
+	INSERT INTO answer_photos (answer_id, url) VALUES (currval('answers_answer_id_seq'), 'demophoto1'),(currval('answers_answer_id_seq'), 'demophoto2'),(currval('answers_answer_id_seq'), 'demophoto3');
+COMMIT;
+
+
+
+
+
+
+
+
+select id as style_id, name, original_price, sale_price, default_style as "default?",
+(
+  select array_to_json(array_agg(row_to_json(p)))
+  from (
+    select url, thumbnail_url
+    from photos
+    where style_id=styles.id
+    order by id asc
+  ) p
+) as photos,
+(
+  select array_to_json(array_agg(row_to_json(sk)))
+  from (
+    select size, quantity
+    from skus
+    where style_id=styles.id
+    order by id asc
+  ) sk
+) as skus
+from (SELECT * FROM styles WHERE product_id = $1) as styles 
+
+
+SELECT q.question_id, q.question_body, q.question_date, q.asker_name, q.question_helpfulness, q.reported, a.answer_id, a.body, a.date_written, a.answerer_name, a.helpfulness,
+(
+SELECT array_to_json(array_agg(row_to_json(p)))
+FROM(
+    SELECT id, url 
+    FROM answer_photos
+    WHERE answer_id = answers.answer_id
+    ) p
+) AS photos
+FROM questions AS q, 

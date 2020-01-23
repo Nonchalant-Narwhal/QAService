@@ -15,7 +15,7 @@ module.exports = {
       if (!questions.hasOwnProperty(loc.question_id)) {
         questions[loc.question_id] = {};
         // copy questions to that prop on questions obj
-        questions[loc.question_id].question_id = loc.question_id;
+        questions[loc.question_id].question_id = Number(loc.question_id);
         questions[loc.question_id].question_body = loc.question_body;
         questions[loc.question_id].question_date = loc.question_date;
         questions[loc.question_id].asker_name = loc.asker_name;
@@ -27,7 +27,7 @@ module.exports = {
       // write answers to that k in obj
       if (loc.answer_id !== null) {
         let answer = {
-          id: loc.answer_id,
+          id: Number(loc.answer_id),
           body: loc.body,
           date: loc.date_written,
           answerer_name: loc.answerer_name,
