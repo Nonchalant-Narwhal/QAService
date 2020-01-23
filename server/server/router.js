@@ -3,30 +3,30 @@ const dateformat = require('dateformat');
 const { pgQuery } = require('./models.js');
 const getQueryParser = require('./parsers/getQueryParsers.js');
 
-// const redis = require('redis');
-// const { promisify } = require('util');
-// const redisClient = redis.createClient({
-//   host: process.env.REDISHOST || 'redis'
-// });
-// const asyncRedisClientSet = promisify(redisClient.set).bind(redisClient);
-// let currentDate = () => {
-//   return dateformat('isoDate');
-// };
+const redis = require('redis');
+const { promisify } = require('util');
+const redisClient = redis.createClient({
+  host: process.env.REDISHOST || 'redis'
+});
+const asyncRedisClientSet = promisify(redisClient.set).bind(redisClient);
+let currentDate = () => {
+  return dateformat('isoDate');
+};
 
 // Gets questions and answers/photos for a product
 router.get('/qa/:product_id', (req, res) => {
   let product_id = req.params.product_id;
 
-  // redisClient.get(product_id, (err, result) => {
-  //   if (result) {
-  //     res.status(200).send(JSON.parse(result));
-  //   } else {
-  let limit = req.query.count || 5;
-  let offset = req.query.page * limit || 0;
-  let columns =
-    'q.question_id, q.question_body, q.question_date, q.asker_name, q.question_helpfulness, q.reported, a.answer_id, a.body, a.date_written, a.answerer_name, a.helpfulness, asph.id, asph.url';
-  pgQuery(
-    `SELECT ${columns}
+  redisClient.get(product_id, (err, result) => {
+    if (result) {
+      res.status(200).send(JSON.parse(result));
+    } else {
+      let limit = req.query.count || 5;
+      let offset = req.query.page * limit || 0;
+      let columns =
+        'q.question_id, q.question_body, q.question_date, q.asker_name, q.question_helpfulness, q.reported, a.answer_id, a.body, a.date_written, a.answerer_name, a.helpfulness, asph.id, asph.url';
+      pgQuery(
+        `SELECT ${columns}
           FROM (
               SELECT *
               FROM questions
@@ -34,25 +34,25 @@ router.get('/qa/:product_id', (req, res) => {
           ) AS q
           LEFT JOIN answers AS a ON q.question_id = a.question_id AND q.reported = 0
           LEFT JOIN answer_photos AS asph ON a.answer_id = asph.answer_id OFFSET $2 LIMIT $3`,
-    [Number(product_id), offset, limit]
-  )
-    .then(result => {
-      let parsed = getQueryParser.getProducts(result.rows, product_id);
-      // asyncRedisClientSet(product_id, JSON.stringify(parsed), 'EX', 30)
-      //   .then(() => {
-      res.status(200);
-      res.send(parsed);
-      // })
-      // .catch(err => {
-      //   console.error(err);
-      //   res.sendStatus(400);
-      // });
-    })
-    .catch(err => {
-      console.error(err);
-    });
-  // }
-  // });
+        [Number(product_id), offset, limit]
+      )
+        .then(result => {
+          let parsed = getQueryParser.getProducts(result.rows, product_id);
+          asyncRedisClientSet(product_id, JSON.stringify(parsed), 'EX', 30)
+            .then(() => {
+              res.status(200);
+              res.send(parsed);
+            })
+            .catch(err => {
+              console.error(err);
+              res.sendStatus(400);
+            });
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    }
+  });
 });
 // Gets answers for a particular question
 router.get('/qa/:question_id/answers', (req, res) => {
