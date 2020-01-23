@@ -1,0 +1,9 @@
+node_modules
+.gitignore
+.env
+docker-compose.yaml
+runMeForDB.txt
+server/server/query.sql
+server/db.sql
+server/db.xml
+server/NOSQLSchema.txt
