@@ -15,5 +15,3 @@ Navigate into the project folder, make a .env file and fill in the following par
 - MAXCLIENTS (max number of clients to pool. optional.)
 - LOADERIO (optional, but can use to change a loader.io verification endpoint)
 - REDISHOST (connetion protocol for redis. If you use the provided docker-compose, this shouldn't need to be entered)
-
-You can build the image using the provided Dockerfile for the node server,
