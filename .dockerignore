@@ -3,7 +3,7 @@ node_modules
 .env
 docker-compose.yaml
 runMeForDB.txt
-server/server/query.sql
+project/server/query.sql
 server/db.sql
 server/db.xml
 server/NOSQLSchema.txt
