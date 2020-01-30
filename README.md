@@ -4,8 +4,7 @@ Questions and Answers service for Project-Greenfield API
 
 # Configuration
 
-Navigate into the project folder
-make a .env file in the projects root folder and fill in the following paramters:
+Navigate into the project folder, make a .env file and fill in the following paramters:
 
 - PORT (port you will run the node.js server on, NOT the postgres server)
 - DBUSERNAME
