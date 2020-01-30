@@ -2,10 +2,10 @@ const { Pool } = require('pg');
 
 // set these to environemnt variables eventually
 const pool = new Pool({
-  user: process.env.DBUSERNAME || 'dude',
-  password: process.env.DBPASSWORD || 'qanon',
-  database: process.env.DB || 'qa',
-  host: process.env.DBHOST || 'ec2-18-207-248-181.compute-1.amazonaws.com',
+  user: process.env.DBUSERNAME,
+  password: process.env.DBPASSWORD,
+  database: process.env.DB,
+  host: process.env.DBHOST,
   port: process.env.DBPORT || 5432,
   max: process.env.MAXCLIENTS || 20
 });

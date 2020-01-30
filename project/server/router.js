@@ -86,7 +86,6 @@ router.get('/qa/:question_id/answers', (req, res) => {
 // Adds a question for the given product
 router.post('/qa/:product_id', (req, res) => {
   let { product_id } = req.params;
-  // default params!
   let { body, name, email } = req.body;
   console.log(`
   Product ID: ${product_id}
